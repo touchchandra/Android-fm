@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.poliveira.apps.allindiafms" >
+
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="com.poliveira.apps.allindiafms.AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <service android:name="com.poliveira.apps.allindiafms.MediaService" />
+
+        <activity
+            android:name="com.poliveira.apps.allindiafms.ActivityMain"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.poliveira.apps.allindiafms.ActivityFM"
+            android:label="@string/title_activity_fragment_fm" >
+        </activity>
+    </application>
+
+</manifest>
