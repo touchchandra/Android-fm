@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -80,8 +79,18 @@ public class FragmentFmList extends Fragment {
         }
     }
 
-    public void clickHandler(View view){
-        Toast.makeText(this.getActivity(),"Hello",Toast.LENGTH_LONG).show();
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            if (mParam1 != null) {
+                Log.d(getClass().getCanonicalName(), mParam1);
+                if (mParam1.equalsIgnoreCase(AppConst.ARG_FAVOURITE_FM)) {
+                    new MyAsyncTask().execute();
+                }
+            }
+        }
     }
 
     @Override
@@ -96,12 +105,13 @@ public class FragmentFmList extends Fragment {
         recList.setLayoutManager(llm);
 
         fmList = new ArrayList<FM>();
-        ca = new AdapterFMList(fmList);
+        ca = new AdapterFMList(getActivity().getApplicationContext(), fmList);
         recList.setAdapter(ca);
         //loadFMFromHTTP();
         new MyAsyncTask().execute();
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -190,6 +200,8 @@ public class FragmentFmList extends Fragment {
                 Log.d(TAG, "Nothing To Load From SQLLITE");
                 if (mParam1.equalsIgnoreCase(AppConst.ARG_ALL_FM)) {
                     loadFMFromHTTP();
+                }else{
+                    ca.notifyDataSetChanged();
                 }
             } else {
                 ca.notifyDataSetChanged();

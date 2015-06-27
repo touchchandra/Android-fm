@@ -72,6 +72,7 @@ public class MySlideTabFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         //mViewPager.setAdapter(new SamplePagerAdapter());
         mViewPager.setAdapter(new SlidingFragmentPagerAdapter(getFragmentManager()));
+        //mViewPager.setOffscreenPageLimit(1);
 
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
         // it's PagerAdapter set.
