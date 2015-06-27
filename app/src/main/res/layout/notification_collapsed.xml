@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="64dp">
+    android:layout_height="64dp"
+    android:background="@color/primary_material_dark">
 
     <ImageView
         android:id="@+id/track_image"
@@ -40,12 +41,13 @@
             android:layout_weight="1"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_action_playback_prev"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="@color/primary_material_dark"
+            android:src="@drawable/ic_action_playback_prev" />
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@color/primary_material_dark"
             android:layout_weight="1">
 
             <ImageButton
@@ -53,9 +55,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="8dp"
+                android:background="@color/primary_material_dark"
                 android:paddingRight="8dp"
                 android:src="@drawable/ic_action_playback_play"
-                android:background="?android:attr/selectableItemBackground"
                 android:visibility="gone" />
 
             <ProgressBar
@@ -74,8 +76,8 @@
             android:layout_weight="1"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_action_playback_next"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="@color/primary_material_dark"
+            android:src="@drawable/ic_action_playback_next" />
     </LinearLayout>
 
     <ImageButton
@@ -84,6 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_cancel"
-        android:background="?android:attr/selectableItemBackground" />
+        android:background="@color/primary_material_dark"
+        android:src="@drawable/ic_action_cancel" />
 </RelativeLayout>

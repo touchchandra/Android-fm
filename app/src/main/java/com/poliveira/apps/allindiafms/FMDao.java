@@ -32,10 +32,11 @@ public class FMDao {
 
     public void addFM(FM fm) {
         ContentValues values = new ContentValues();
-        values.put(FMSQLLiteHelper.COLUMN_FMID, fm.id);
+        values.put(FMSQLLiteHelper.COLUMN_FMID, fm.fmid);
         values.put(FMSQLLiteHelper.COLUMN_NAME, fm.name);
         values.put(FMSQLLiteHelper.COLUMN_URL, fm.url);
         values.put(FMSQLLiteHelper.COLUMN_IMAGEURL, fm.imageurl);
+        values.put(FMSQLLiteHelper.COLUMN_FAVOURITE, fm.favourite);
         mDatabase.insert(FMSQLLiteHelper.TABLE_HINDIFMS, null, values);
 //        long insertId = mDatabase.insert(FMSQLLiteHelper.TABLE_HINDIFMS, null, values);
 //        Cursor cursor = mDatabase.query(FMSQLLiteHelper.TABLE_HINDIFMS, mAllCols, FMSQLLiteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
@@ -47,13 +48,12 @@ public class FMDao {
     }
 
     public void deleteFM(FM fm) {
-        int id = fm.getId();
-        deleteFM(id);
+        deleteFM(fm.fmid);
 
     }
 
-    public void deleteFM(int id) {
-        mDatabase.delete(mFMSQLLiteHelper.TABLE_HINDIFMS, mFMSQLLiteHelper.COLUMN_ID + " = " + id, null);
+    public void deleteFM(String fmid) {
+        mDatabase.delete(mFMSQLLiteHelper.TABLE_HINDIFMS, mFMSQLLiteHelper.COLUMN_FMID + " = '" + fmid + "'", null);
     }
 
     public void deleteAll() {
@@ -62,23 +62,34 @@ public class FMDao {
 
     private FM cursorToFM(Cursor cursor) {
         FM fm = new FM();
-        fm.id = cursor.getInt(0);
+        fm.fmid = cursor.getString(0);
         fm.name = cursor.getString(1);
         fm.url = cursor.getString(2);
         fm.imageurl = cursor.getString(3);
+        fm.favourite = cursor.getString(4);
         return fm;
     }
 
-    public ArrayList<FM> getAllInfo() {
+    public ArrayList<FM> getInfo(String infoType) {
+        String filter = "";
+        if (infoType.equalsIgnoreCase(AppConst.ARG_FAVOURITE_FM)) {
+            filter = " " + FMSQLLiteHelper.COLUMN_FAVOURITE + " = 'Y'";
+        }
         ArrayList<FM> fms = new ArrayList<>();
-        String[] tableColumns = new String[]{FMSQLLiteHelper.COLUMN_FMID, FMSQLLiteHelper.COLUMN_NAME, FMSQLLiteHelper.COLUMN_URL, FMSQLLiteHelper.COLUMN_IMAGEURL};
-        Cursor cursor = mDatabase.query(FMSQLLiteHelper.TABLE_HINDIFMS, tableColumns, null, null, null, null, null);
+        String[] tableColumns = new String[]{FMSQLLiteHelper.COLUMN_FMID, FMSQLLiteHelper.COLUMN_NAME, FMSQLLiteHelper.COLUMN_URL, FMSQLLiteHelper.COLUMN_IMAGEURL, FMSQLLiteHelper.COLUMN_FAVOURITE};
+        Cursor cursor = mDatabase.query(FMSQLLiteHelper.TABLE_HINDIFMS, tableColumns, filter, null, null, null, FMSQLLiteHelper.COLUMN_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             fms.add(cursorToFM(cursor));
             cursor.moveToNext();
         }
         return fms;
+    }
+
+    public void setFavourite(String fmid, String flag) {
+        ContentValues values = new ContentValues();
+        values.put(FMSQLLiteHelper.COLUMN_FAVOURITE, flag);
+        mDatabase.update(FMSQLLiteHelper.TABLE_HINDIFMS, values, FMSQLLiteHelper.COLUMN_FMID + " = '" + fmid + "'", null);
     }
 }
 

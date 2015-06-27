@@ -30,6 +30,7 @@ public class ActivityFM extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_fm);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -44,12 +45,8 @@ public class ActivityFM extends ActionBarActivity {
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        //mToolbar.getBackground().setAlpha(0);
-        //myView = (View) findViewById(R.id.my_view);
         setSupportActionBar(mToolbar);
-
-        //ViewCompat.setElevation(mToolbar,0);
-        //ViewCompat.setElevation(myView,10);
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         startService(MediaService.createPlaylistIntent(this, fmList));
 
@@ -121,7 +118,7 @@ public class ActivityFM extends ActionBarActivity {
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), pButton.getText(), Toast.LENGTH_SHORT).show();
                     broadcastIntent(getActivity(), pAction);
-                    if(pAction.equalsIgnoreCase(MediaService.ACTION_QUIT)){
+                    if (pAction.equalsIgnoreCase(MediaService.ACTION_QUIT)) {
                         getActivity().finish();
                     }
                 }

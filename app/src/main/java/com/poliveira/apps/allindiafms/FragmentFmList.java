@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -77,6 +78,10 @@ public class FragmentFmList extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    public void clickHandler(View view){
+        Toast.makeText(this.getActivity(),"Hello",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -174,7 +179,7 @@ public class FragmentFmList extends Fragment {
             FMDao fmDao = new FMDao(getActivity().getApplicationContext());
             fmDao.open();
             fmList.clear();
-            fmList.addAll(fmDao.getAllInfo());
+            fmList.addAll(fmDao.getInfo(mParam1));
             fmDao.close();
             return null;
         }
@@ -183,7 +188,9 @@ public class FragmentFmList extends Fragment {
         protected void onPostExecute(Void param) {
             if (fmList.size() == 0) {
                 Log.d(TAG, "Nothing To Load From SQLLITE");
-                loadFMFromHTTP();
+                if (mParam1.equalsIgnoreCase(AppConst.ARG_ALL_FM)) {
+                    loadFMFromHTTP();
+                }
             } else {
                 ca.notifyDataSetChanged();
             }

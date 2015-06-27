@@ -29,7 +29,7 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     private ProgressBar playSeekBar;
     private MediaPlayer player;
-    private boolean isPlaying = false;
+
 
     public AdapterFMList(ArrayList<FM> contactList) {
         this.fmList = contactList;
@@ -43,10 +43,13 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
     @Override
     public void onBindViewHolder(FMViewHolder contactViewHolder, int i) {
         FM ci = fmList.get(i);
+        contactViewHolder.fmid = ci.fmid;
         contactViewHolder.name.setText(ci.name);
         contactViewHolder.url.setText(ci.url);
         contactViewHolder.logo.setImageUrl(ci.imageurl, imageLoader);
         contactViewHolder.logo.setErrorImageResId(R.drawable.ic_launcher);
+        contactViewHolder.like.setText(ci.favourite);
+        contactViewHolder.favourite = ci.favourite;
     }
 
     @Override
@@ -67,13 +70,6 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
 
         @Override
         public void onViewClick(View view, int position) {
-            Toast.makeText(view.getContext(), Boolean.toString(isPlaying) + position + "name:" + view.getResources().getResourceEntryName(view.getId()), Toast.LENGTH_SHORT).show();
-            //initializeMediaPlayer(fmList.get(position).url);
-            //startPlaying();
-            //ArrayList<FM> fmSelected = new ArrayList<FM>();
-            //fmSelected.add(fmList.get(position));
-            //view.getContext().startService(MediaService.createPlaylistIntent(view.getContext(), fmList));
-            //view.getContext().startService(MediaService.createSinglePlayIntent(view.getContext(), fmList.get(position)));
             Intent fmIntent = new Intent(view.getContext(), ActivityFM.class);
             fmIntent.putExtra(ActivityFM.param_fmlist, fmList);
             view.getContext().startActivity(fmIntent);
@@ -81,18 +77,20 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
     }
 
     public static class FMViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        protected String fmid;
         protected NetworkImageView logo;
         protected TextView name;
         protected TextView url;
         protected TextView slogan;
         protected Button like;
+        protected String favourite;
         Context context;
         public IMyViewHolderClicks mListener;
-        protected int positioin;
+        protected int position;
 
-        public FMViewHolder(View v, IMyViewHolderClicks listner) {
+        public FMViewHolder(View v, IMyViewHolderClicks listener) {
             super(v);
-            mListener = listner;
+            mListener = listener;
             context = v.getContext();
             logo = (NetworkImageView) v.findViewById(R.id.logo);
             name = (TextView) v.findViewById(R.id.title);
@@ -105,35 +103,39 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
 
         @Override
         public void onClick(View v) {
-            positioin = getPosition();
+            position = getPosition();
             if (v instanceof Button) {
-                //mListener.onButtonClick((Button) v, positioin);
+                //mListener.onButtonClick((Button) v, position);
+                Toast.makeText(v.getContext(), fmid + " :" + name.getText(), Toast.LENGTH_LONG).show();
+                FMDao fmDAO = new FMDao(context);
+                fmDAO.open();
+                String flag = favourite.equalsIgnoreCase("Y") ? "N" : "Y";
+                fmDAO.setFavourite(fmid, flag);
+                fmDAO.close();
+                like.setText(flag);
+
             } else {
-                mListener.onViewClick(v, positioin);
+                mListener.onViewClick(v, position);
             }
         }
 
         public static interface IMyViewHolderClicks {
-            public void onButtonClick(Button button, int positioin);
+            public void onButtonClick(Button button, int position);
 
-            public void onViewClick(View view, int positioin);
+            public void onViewClick(View view, int position);
         }
     }
 
     protected void startPlaying() {
 
         //playSeekBar.setVisibility(View.VISIBLE);
-
         player.prepareAsync();
-
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
             public void onPrepared(MediaPlayer mp) {
                 player.start();
             }
         });
-
-
     }
 
     private void stopPlaying() {

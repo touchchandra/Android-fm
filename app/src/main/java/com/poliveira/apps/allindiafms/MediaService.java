@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
@@ -328,11 +329,13 @@ public class MediaService
             mIsReady = false;
             mIsBuffering = true;
             mMediaPlayer.reset();
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setOnPreparedListener(mMediaPrepared);
             mMediaPlayer.setOnCompletionListener(mMediaCompleted);
             mMediaPlayer.setOnInfoListener(mMediaInfo);
             mMediaPlayer.setOnErrorListener(mMediaError);
             mMediaPlayer.setDataSource(item.getUrl());
+            Log.d(TAG,item.getUrl());
             mMediaPlayer.prepareAsync();
 
             updateRemoteViews();

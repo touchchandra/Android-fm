@@ -26,12 +26,8 @@ public class ActivityMain extends ActionBarActivity implements NavigationDrawerC
         //setContentView(R.layout.activity_main_blacktoolbar);
         //setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        //myView = (View) findViewById(R.id.my_view);
         setSupportActionBar(mToolbar);
-
-        //ViewCompat.setElevation(mToolbar, 0);
         getSupportActionBar().setElevation(0);
-        //ViewCompat.setElevation(myView,10);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
@@ -56,18 +52,17 @@ public class ActivityMain extends ActionBarActivity implements NavigationDrawerC
         Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
         Fragment fragment = (MySlideTabFragment) MySlideTabFragment.newInstance("100", "Test");
 
-
         switch (position) {
             case 0:
-                fragment = (FragmentHelp) FragmentHelp.newInstance("100", "Cartoons");
+                fragment = (MySlideTabFragment) MySlideTabFragment.newInstance("100", "Jokes");
                 break;
             case 1:
-                fragment = (MySlideTabFragment) MySlideTabFragment.newInstance("100", "Jokes");
-
+                fragment = (FragmentHelp) FragmentHelp.newInstance("100", "Cartoons");
                 break;
             case 2:
                 fragment = (FragmentFmList) FragmentFmList.newInstance("100", "Jokes");
                 break;
+
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }

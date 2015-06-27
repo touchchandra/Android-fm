@@ -12,38 +12,58 @@ import org.json.JSONObject;
  */
 public class FM implements Parcelable {
     String TAG = FM.class.getName();
-    int id;
+
+    String fmid;
     String name;
-    String url;
     String imageurl;
+    String address;
+    String weburl;
+    String url;
+    String slogan;
+    String genre;
+    String favourite;
 
     public FM() {
 
     }
 
-    public FM(int id, String name, String url, String slogan) {
-        this.id = id;
+    public FM(String fmid, String name, String imageurl, String address, String weburl, String url, String slogan, String genre, String favourite) {
+        this.fmid = fmid;
         this.name = name;
+        this.imageurl = imageurl;
+        this.address = address;
+        this.weburl = weburl;
         this.url = url;
-        this.imageurl = slogan;
+        this.weburl = weburl;
+        this.slogan = slogan;
+        this.genre = genre;
+        this.favourite = favourite;
     }
 
 
     public FM(Parcel source) {
+        fmid = source.readString();
         name = source.readString();
-        url = source.readString();
         imageurl = source.readString();
+        address = source.readString();
+        weburl = source.readString();
+        url = source.readString();
+        slogan = source.readString();
+        genre = source.readString();
+        favourite = source.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(fmid);
         dest.writeString(name);
-        dest.writeString(url);
         dest.writeString(imageurl);
-    }
-
-    public int getId() {
-        return id;
+        dest.writeString(address);
+        dest.writeString(weburl);
+        dest.writeString(url);
+        dest.writeString(slogan);
+        dest.writeString(genre);
+        dest.writeString(favourite);
     }
 
     public String getName() {
@@ -56,6 +76,46 @@ public class FM implements Parcelable {
 
     public String getImageurl() {
         return imageurl;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(String favourite) {
+        this.favourite = favourite;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
+    }
+
+    public String getWeburl() {
+        return weburl;
+    }
+
+    public void setWeburl(String weburl) {
+        this.weburl = weburl;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     @Override
@@ -77,7 +137,16 @@ public class FM implements Parcelable {
 
     public static FM jsonToFM(JSONObject jo) {
         try {
-            FM fm = new FM(jo.getInt(AppConst.JSON_FM_ID), jo.getString(AppConst.JSON_FM_NAME), jo.getString(AppConst.JSON_FM_URL), jo.getString(AppConst.JSON_FM_IMAGE_URL));
+            FM fm = new FM(
+
+                    jo.getString(AppConst.JSON_FM_ID),
+                    jo.getString(AppConst.JSON_FM_NAME),
+                    jo.getString(AppConst.JSON_FM_IMAGE_URL),
+                    jo.getString(AppConst.JSON_FM_ADDRESS),
+                    jo.getString(AppConst.JSON_FM_WBURL),
+                    jo.getString(AppConst.JSON_FM_URL),
+                    jo.getString(AppConst.JSON_FM_SLOGAN),
+                    jo.getString(AppConst.JSON_FM_GENRE), "N");
             fm.print();
             return fm;
         } catch (JSONException e) {
@@ -87,6 +156,6 @@ public class FM implements Parcelable {
     }
 
     public void print() {
-        Log.d(TAG, "Id:" + id + "  Name :" + name + "   Url :" + url + " ImageUrl : " + imageurl);
+        Log.d(TAG, "\tId:" + fmid + "  Name :" + name + "   Url :" + url + " ImageUrl : " + imageurl);
     }
 }

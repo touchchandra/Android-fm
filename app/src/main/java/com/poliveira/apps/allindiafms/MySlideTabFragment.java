@@ -189,15 +189,14 @@ public class MySlideTabFragment extends Fragment {
             Fragment fragment = new FragmentHelp();
             switch (position) {
                 case 0:
-                    fragment = new FragmentFmList();
+                    fragment = FragmentFmList.newInstance(AppConst.ARG_ALL_FM, "NONE");
                     break;
                 case 1:
-                    fragment = new FragmentHelp();
+                    fragment = FragmentFmList.newInstance(AppConst.ARG_FAVOURITE_FM, "NONE");
                     break;
                 case 2:
-                    fragment = new FragmentHelp();
+                    fragment = FragmentFmList.newInstance(AppConst.ARG_RECENT_FM, "NONE");
                     break;
-
             }
 
 
