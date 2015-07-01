@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,31 +42,30 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
     @Override
     public void onBindViewHolder(final FMViewHolder contactViewHolder, final int i) {
         final FM ci = fmList.get(i);
-        contactViewHolder.fmid = ci.fmid;
-        contactViewHolder.name.setText(ci.name);
         contactViewHolder.url.setText(ci.url);
         contactViewHolder.logo.setImageUrl("http://png-3.findicons.com/files/icons/2145/private_stock/128/ps_vudu_logo.png", imageLoader);
+        contactViewHolder.logo.setDefaultImageResId(R.drawable.ic_launcher);
         contactViewHolder.logo.setErrorImageResId(R.drawable.ic_launcher);
         //contactViewHolder.like.setText(ci.favourite);
         contactViewHolder.favourite = ci.favourite;
         contactViewHolder.like.setImageResource(ci.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
-        contactViewHolder.like.setOnClickListener(new View.OnClickListener() {
-                                                      @Override
-                                                      public void onClick(View v) {
-                                                          Toast.makeText(ctx, ci.fmid, Toast.LENGTH_LONG).show();
-                                                          ci.favourite = ci.favourite.equalsIgnoreCase("Y") ? "N" : "Y";
-
-                                                          contactViewHolder.like.setImageResource(ci.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
-
-                                                          FMDao fmDAO = new FMDao(ctx);
-                                                          fmDAO.open();
-                                                          fmList.get(i).favourite = ci.favourite;
-                                                          fmDAO.setFavourite(ci.fmid, ci.favourite);
-                                                          fmDAO.close();
-                                                      }
-                                                  }
-        );
-        //contactViewHolder.like.setImageResource(ci.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
+//        contactViewHolder.like.setOnClickListener(new View.OnClickListener() {
+//                                                      @Override
+//                                                      public void onClick(View v) {
+//                                                          Toast.makeText(ctx, ci.fmid, Toast.LENGTH_LONG).show();
+//                                                          ci.favourite = ci.favourite.equalsIgnoreCase("Y") ? "N" : "Y";
+//
+//                                                          contactViewHolder.like.setImageResource(ci.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
+//
+//                                                          FMDao fmDAO = new FMDao(ctx);
+//                                                          fmDAO.open();
+//                                                          fmList.get(i).favourite = ci.favourite;
+//                                                          fmDAO.setFavourite(ci.fmid, ci.favourite);
+//                                                          fmDAO.close();
+//                                                      }
+//                                                  }
+//        );
+//        contactViewHolder.like.setImageResource(ci.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
     }
 
     @Override
@@ -82,10 +80,28 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
     public class MyViewHolderListner implements FMViewHolder.IMyViewHolderClicks {
 
         @Override
-        public void onButtonClick(Button button, int position) {
-            Toast.makeText(button.getContext(), position + "Button name:" + button.getResources().getResourceEntryName(button.getId()), Toast.LENGTH_SHORT).show();
+        public void onButtonClick(final ImageButton button, final int position) {
+            button.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                                              FM fm = fmList.get(position);
+                                              Toast.makeText(ctx, fm.fmid, Toast.LENGTH_LONG).show();
+                                              fm.favourite = fm.favourite.equalsIgnoreCase("Y") ? "N" : "Y";
+
+                                              button.setImageResource(fm.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
+
+                                              FMDao fmDAO = new FMDao(ctx);
+                                              fmDAO.open();
+                                              fmList.get(position).favourite = fm.favourite;
+                                              fmDAO.setFavourite(fm.fmid, fm.favourite);
+                                              fmDAO.close();
+                                          }
+                                      }
+            );
+            //button.setImageResource(fm.favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
         }
 
+    
         @Override
         public void onViewClick(View view, int position) {
             Intent fmIntent = new Intent(view.getContext(), ActivityFM.class);
@@ -122,9 +138,10 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
 
         @Override
         public void onClick(View v) {
-/*            position = getPosition();
+            position = getPosition();
             if (v instanceof ImageButton) {
-                //mListener.onButtonClick((Button) v, position);
+                mListener.onButtonClick((ImageButton) v, position);
+                /*
                 Toast.makeText(v.getContext(), fmid + " :" + name.getText(), Toast.LENGTH_LONG).show();
                 FMDao fmDAO = new FMDao(context);
                 fmDAO.open();
@@ -133,15 +150,15 @@ public class AdapterFMList extends RecyclerView.Adapter<AdapterFMList.FMViewHold
                 fmDAO.close();
                 //like.setText(flag);
                 like.setImageResource(favourite.equalsIgnoreCase("Y") ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp);
-
+                */
 
             } else {
                 mListener.onViewClick(v, position);
-            }*/
+            }
         }
 
         public static interface IMyViewHolderClicks {
-            public void onButtonClick(Button button, int position);
+            public void onButtonClick(ImageButton button, int position);
 
             public void onViewClick(View view, int position);
         }
